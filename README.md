@@ -71,6 +71,24 @@ sulla MG4:
 
 > 🇬🇧 *Italian-language video guide showing the launcher running on the MG4 head unit.*
 
+## License
+
+MG4 Swipe Launcher is free software: you can redistribute it and modify it under
+the terms of the **GNU General Public License, version 3 or later**, as published
+by the Free Software Foundation. The full text is in [`LICENSE`](LICENSE).
+
+    Copyright (C) 2024 Tommaso Vietina
+
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY
+    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+Anyone may use this, change it and publish their own version — and a published
+version has to carry its source under the same licence.
+
+The licence covers the code written for this project. Graphic resources, trademarks
+and brand names belong to their respective owners, as set out below.
+
 ## Disclaimer (English)
 
 This project is provided **for study and educational purposes only**. It is an
