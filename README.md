@@ -1,10 +1,10 @@
-# MG4 Swipe Launcher
+# MG4 Swipe
 
 <p align="center">
-  <img src="https://ws2.tommasovietina.it/mg4/MG4_Swipe.png" alt="MG4 Swipe Launcher" width="200" />
+  <img src="https://ws2.tommasovietina.it/mg4/MG4_Swipe.png" alt="MG4 Swipe" width="200" />
 </p>
 
-MG4_Swipe_NovaLauncher is an app that enables a **swipe up** action from the bottom edge of the screen to quickly launch a user-selected app. This feature is especially useful for fast and easy access to a specific app of your choice.
+MG4 Swipe is an app that enables a **swipe up** action from the bottom edge of the screen to quickly launch a user-selected app. This feature is especially useful for fast and easy access to a specific app of your choice.
 
 > 💡 It pairs perfectly with [MG4 Simple Launcher](https://github.com/Tommasov/MG4_Simple_Launcher) — which is now the **default** swipe target. As the home launcher it stays warm in memory, so the swipe re-opens it almost instantly, for a clean, system-integrated home experience.
 
