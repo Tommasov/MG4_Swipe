@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -57,6 +58,17 @@ public class SwipeService extends Service {
     // is shown, cleared once dismissed. null means "not currently waiting".
     private String pendingLoaderPackage;
 
+    // Measurement, kept apart from the loader on purpose: the loader is one of the things
+    // under suspicion, so the timing has to work with it switched off.
+    private Journal launchLog;
+    private String pendingMeasurePackage;
+    private long launchStartedAt;
+    private long previousLaunchAt;
+    private LaunchStrategy launchStrategy;
+    /** A launch that never reports itself is a finding too, so it is not left hanging. */
+    private static final long MEASURE_TIMEOUT_MS = 10000;
+    private Runnable measureTimeout;
+
     @SuppressLint("ForegroundServiceType")
     @Override
     public void onCreate() {
@@ -64,6 +76,7 @@ public class SwipeService extends Service {
 
         if (Settings.canDrawOverlays(this)) {
             preferencesManager = new PreferencesManager(this);
+            launchLog = new Journal(this, "launch", 24);
             IntentFilter foregroundFilter = new IntentFilter(AccService.ACTION_FOREGROUND_PACKAGE);
             ContextCompat.registerReceiver(this, foregroundReceiver, foregroundFilter,
                     ContextCompat.RECEIVER_NOT_EXPORTED);
@@ -126,6 +139,9 @@ public class SwipeService extends Service {
             if (pendingLoaderPackage != null && pendingLoaderPackage.equals(pkg)) {
                 hideLoader();
             }
+            if (pendingMeasurePackage != null && pendingMeasurePackage.equals(pkg)) {
+                recordLaunch(SystemClock.elapsedRealtime() - launchStartedAt, false);
+            }
         }
     };
 
@@ -142,11 +158,9 @@ public class SwipeService extends Service {
             packageName = DEFAULT_LAUNCHER_PACKAGE;
         }
 
-        // getLaunchIntentForPackage() returns NEW_TASK | RESET_TASK_IF_NEEDED by default.
-        // RESET_TASK_IF_NEEDED resets the task when it is brought back from the background,
-        // which can add extra work when re-foregrounding the (home) launcher and was a
-        // suspect for the 2-3s delay on the second swipe. We instead reuse the existing
-        // instance with NEW_TASK | SINGLE_TOP, so no task reset is forced.
+        // The flags are chosen at runtime rather than compiled in, because which of them
+        // is quickest can only be found out on the head unit and one trip has to answer for
+        // all four. See LaunchStrategy.
         Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
         if (intent != null) {
             if (preferencesManager.isShowLoader()) {
@@ -155,7 +169,8 @@ public class SwipeService extends Service {
                 // becomes visible. Set after showLoader(), which clears any prior state.
                 pendingLoaderPackage = packageName;
             }
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startMeasuring(packageName);
+            intent.setFlags(launchStrategy.flags);
             startActivity(intent);
         } else {
             Toast.makeText(this, R.string.package_not_found, Toast.LENGTH_SHORT).show();
@@ -167,6 +182,50 @@ public class SwipeService extends Service {
     // intentional "loading" rather than a glitch. It is dismissed event-driven, when the
     // target app's window becomes foreground (foregroundReceiver); LOADER_TIMEOUT_MS is
     // only a safety cap so the overlay can never get stuck if that event is missed.
+    /**
+     * Starts the clock on one launch, and remembers how long since the last one.
+     *
+     * <p>That second number is the point. The delay only appears on re-openings made soon
+     * after returning to the launcher, and is absent after a long stop — so the gap since the
+     * previous launch is the variable the experiment is about, and a duration recorded without
+     * it would be unreadable afterwards.
+     */
+    private void startMeasuring(String packageName) {
+        long now = SystemClock.elapsedRealtime();
+        if (pendingMeasurePackage != null) {
+            // A previous launch never reported. Close it before opening another.
+            recordLaunch(now - launchStartedAt, true);
+        }
+        launchStrategy = preferencesManager.getLaunchStrategy();
+        pendingMeasurePackage = packageName;
+        launchStartedAt = now;
+
+        if (measureTimeout != null) {
+            loaderHandler.removeCallbacks(measureTimeout);
+        }
+        measureTimeout = () -> recordLaunch(SystemClock.elapsedRealtime() - launchStartedAt, true);
+        loaderHandler.postDelayed(measureTimeout, MEASURE_TIMEOUT_MS);
+    }
+
+    private void recordLaunch(long waitedMs, boolean timedOut) {
+        if (pendingMeasurePackage == null) {
+            return;
+        }
+        pendingMeasurePackage = null;
+        if (measureTimeout != null) {
+            loaderHandler.removeCallbacks(measureTimeout);
+            measureTimeout = null;
+        }
+        long gap = previousLaunchAt == 0 ? -1 : launchStartedAt - previousLaunchAt;
+        previousLaunchAt = launchStartedAt;
+        if (launchLog != null) {
+            launchLog.add(launchStrategy.label
+                    + "  loader " + (preferencesManager.isShowLoader() ? "on " : "off")
+                    + "  waited " + (timedOut ? "OVER " + waitedMs : String.valueOf(waitedMs)) + " ms"
+                    + "  since previous " + (gap < 0 ? "—" : (gap / 1000f) + " s"));
+        }
+    }
+
     private void showLoader() {
         if (windowManager == null) {
             return;

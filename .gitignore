@@ -11,5 +11,7 @@ local.properties
 
 # Signing — never commit the keystore or its credentials
 keystore.properties
+# Report write key — never commit it
+apikeys.properties
 *.jks
 *.keystore

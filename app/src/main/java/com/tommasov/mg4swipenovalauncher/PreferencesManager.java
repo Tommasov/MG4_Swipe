@@ -9,6 +9,7 @@ public class PreferencesManager {
     private static final String KEY_BACK_BUTTON_VISIBLE = "backButtonVisible";
     private static final String KEY_SWIPE_AREAS_SWAPPED = "swipeAreasSwapped";
     private static final String KEY_SHOW_LOADER = "showLoader";
+    private static final String KEY_LAUNCH_STRATEGY = "launchStrategy";
     // Legacy string key ("VISIBLE"/"INVISIBLE") kept only for one-time migration.
     private static final String LEGACY_KEY_BACK_BUTTON_VISIBILITY = "backButtonVisibility";
 
@@ -22,6 +23,15 @@ public class PreferencesManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_PACKAGE_NAME, packageName);
         editor.apply();
+    }
+
+    /** Which way the target is brought forward. A measuring instrument, not a setting. */
+    public LaunchStrategy getLaunchStrategy() {
+        return LaunchStrategy.byName(sharedPreferences.getString(KEY_LAUNCH_STRATEGY, null));
+    }
+
+    public void setLaunchStrategy(LaunchStrategy strategy) {
+        sharedPreferences.edit().putString(KEY_LAUNCH_STRATEGY, strategy.name()).apply();
     }
 
     public String getSelectedPackage() {

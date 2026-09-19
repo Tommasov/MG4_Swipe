@@ -3,13 +3,16 @@ package com.tommasov.mg4swipenovalauncher;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -43,6 +46,31 @@ public class MainActivity extends AppCompatActivity {
 
         TextView explanationText = findViewById(R.id.explanation_text);
         explanationText.setText(R.string.explanation_text);
+
+        Button sendButton = findViewById(R.id.button_send_report);
+        // Offered only when this build has a key: a fresh clone shows nothing rather than a
+        // button that fails.
+        sendButton.setVisibility(ProbeReport.isConfigured() ? android.view.View.VISIBLE
+                : android.view.View.GONE);
+        sendButton.setOnClickListener(v -> askThenSend(sendButton));
+
+        Button strategyButton = findViewById(R.id.button_launch_strategy);
+        strategyButton.setText(getString(R.string.launch_strategy,
+                preferencesManager.getLaunchStrategy().label));
+        strategyButton.setOnClickListener(v -> {
+            LaunchStrategy next = preferencesManager.getLaunchStrategy().next();
+            preferencesManager.setLaunchStrategy(next);
+            strategyButton.setText(getString(R.string.launch_strategy, next.label));
+            // Restarted so the service picks the new strategy up without a reboot: it reads
+            // the preference per launch, but the restart also makes the change visible.
+            startSwipeService();
+        });
+
+        TextView launchLogText = findViewById(R.id.launch_log_text);
+        String launchLog = new Journal(this, "launch", 24).describe();
+        launchLogText.setText(launchLog);
+        launchLogText.setVisibility(launchLog.isEmpty() ? android.view.View.GONE
+                : android.view.View.VISIBLE);
 
         TextView bootText = findViewById(R.id.boot_timing_text);
         String bootTiming = new BootLog(this).describe(this);
@@ -151,6 +179,67 @@ public class MainActivity extends AppCompatActivity {
     private void stopSwipeService() {
         Intent intent = new Intent(this, SwipeService.class);
         stopService(intent);
+    }
+
+    /**
+     * Asks for one sentence, then sends the measurements.
+     *
+     * <p>Both halves matter. The report leaves the car for somebody else's server, which is
+     * not a thing to do on a stray tap without saying so. And the numbers on their own are
+     * half a report: only the sentence says what was being tried when they were taken — which
+     * app was the target, how quickly the swipes followed one another, whether the engine was
+     * running.
+     */
+    private void askThenSend(Button sendButton) {
+        final EditText note = new EditText(this);
+        note.setHint(R.string.report_note_hint);
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.report_send)
+                .setMessage(R.string.report_explain)
+                .setView(note)
+                .setPositiveButton(R.string.report_send, (d, w) -> {
+                    sendButton.setEnabled(false);
+                    ProbeReport.send(this, note.getText().toString(), collectReport(),
+                            new ProbeReport.Callback() {
+                                @Override
+                                public void onSent(@NonNull String reportName) {
+                                    sendButton.setEnabled(true);
+                                    Toast.makeText(MainActivity.this,
+                                            getString(R.string.report_sent, reportName),
+                                            Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onFailed(@NonNull String reason) {
+                                    sendButton.setEnabled(true);
+                                    Toast.makeText(MainActivity.this,
+                                            getString(R.string.report_failed, reason),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    /** Everything worth reading afterwards, in the order it is worth reading it. */
+    @NonNull
+    private String collectReport() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("device: ").append(Build.MANUFACTURER).append(' ').append(Build.MODEL)
+                .append(" (").append(Build.DEVICE).append("), android ")
+                .append(Build.VERSION.RELEASE).append(" / API ").append(Build.VERSION.SDK_INT)
+                .append('\n');
+        sb.append("target: ").append(preferencesManager.getSelectedPackage()).append('\n');
+        sb.append("strategy: ").append(preferencesManager.getLaunchStrategy().label)
+                .append("   loader: ").append(preferencesManager.isShowLoader() ? "on" : "off")
+                .append('\n');
+        sb.append('\n').append("BOOT\n  ")
+                .append(new BootLog(this).describe(this)).append('\n');
+        sb.append('\n').append("LAUNCHES\n");
+        String launches = new Journal(this, "launch", 24).describe();
+        sb.append(launches.isEmpty() ? "  nothing recorded yet" : launches).append('\n');
+        return sb.toString();
     }
 
     private void startSwipeService() {

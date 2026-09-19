@@ -7,6 +7,15 @@ plugins {
 
 // Release signing credentials live in keystore.properties (git-ignored), so the
 // same stable key signs every build and users can always update in place.
+// The report write key, git-ignored like the launcher's. Absent from a fresh clone, and
+// then the send button is not offered rather than offered and broken.
+val apiKeysFile = rootProject.file("apikeys.properties")
+val apiKeys = Properties().apply {
+    if (apiKeysFile.exists()) {
+        load(FileInputStream(apiKeysFile))
+    }
+}
+
 val keystorePropertiesFile = rootProject.file("keystore.properties")
 val keystoreProperties = Properties().apply {
     if (keystorePropertiesFile.exists()) {
@@ -23,9 +32,27 @@ android {
         minSdk = 28
         targetSdk = 34
         versionCode = 4
-        versionName = "1.4.1"
+        // Suffixed because this build is not the published 1.4.1: it carries the launch
+        // experiment, the report sender and the INTERNET permission that comes with it.
+        // The report prints this string, so it also says which build produced a reading.
+        versionName = "1.4.1-lab"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // The author's report endpoint. Write-only by design: it accepts a report and can do
+        // nothing else — no reading back, no listing, no deleting, with any key. That is what
+        // makes it safe to ship the write key inside an APK.
+        buildConfigField(
+            "String",
+            "PROBE_URL",
+            "\"https://ws2.tommasovietina.it/mg4/probe.php\""
+        )
+        buildConfigField("String", "PROBE_KEY", "\"${apiKeys.getProperty("probe.key", "")}\"")
+        buildConfigField("String", "PROBE_APP", "\"swipe\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     signingConfigs {

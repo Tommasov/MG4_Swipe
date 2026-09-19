@@ -17,4 +17,10 @@
     <string name="selected_app">Selected: %1$s</string>
     <string name="version_label">v%1$s</string>
     <string name="boot_timing">Last boot: locked %1$s, completed %2$s</string>
+    <string name="launch_strategy">Launch: %1$s</string>
+    <string name="report_send">Send report</string>
+    <string name="report_explain">The measurements below leave the car and go to the author\'s server. Add a line about what you were doing: which app was the target, how quickly you repeated the swipe.</string>
+    <string name="report_note_hint">What were you trying?</string>
+    <string name="report_sent">Sent: %1$s</string>
+    <string name="report_failed">Not sent: %1$s</string>
 </resources>

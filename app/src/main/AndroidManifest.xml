@@ -5,6 +5,12 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- DIAGNOSTIC BRANCH ONLY — must not reach master.
+         This app has never asked for the network, and that is part of what makes it easy to
+         trust: two invisible strips and a button, with no way out. The permission is here so
+         that a launch experiment run in a moving car can be sent home in one press instead of
+         transcribed from a photograph of the screen. See ProbeReport. -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"

@@ -8,6 +8,8 @@
     android:orientation="vertical"
     android:paddingTop="40dp">
 
+    <!-- The launch experiment lives in this screen: a button to cycle the strategy and the
+         log of what each one cost. Instrumentation, never shipped. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +23,23 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="12dp"
             android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button_send_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="12dp"
+            android:text="@string/report_send"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/button_launch_strategy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="12dp"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/boot_timing_text"
@@ -97,6 +116,16 @@
         android:layout_height="400dp"
         android:layout_marginHorizontal="200dp"
         android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/launch_log_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="200dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="monospace"
+        android:textSize="11sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
