@@ -20,4 +20,6 @@
     <string name="version_label">v%1$s</string>
     <string name="section_options">Opzioni</string>
     <string name="section_target">App da aprire</string>
+    <string name="section_tip">Buono a sapersi</string>
+    <string name="tip_leave_with_back">Uscire dall\'app con la striscia indietro invece che col tasto Home la fa riaprire circa quindici volte più in fretta: 155 ms contro 2300. Il tasto Home lascia il sistema occupato per una decina di secondi, e non c\'è niente che quest\'app possa fare per accorciarli.</string>
 </resources>

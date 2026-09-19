@@ -109,6 +109,18 @@
                         android:thumb="@drawable/switch_thumb_selector"
                         app:switchPadding="@dimen/switch_padding"
                         app:track="@drawable/switch_track_selector" />
+
+                    <View style="@style/Hairline" />
+
+                    <!-- Not a setting: the one thing that measurably changes how fast the app
+                         comes back, and it is a habit rather than an option. -->
+                    <TextView
+                        style="@style/SectionHeader"
+                        android:text="@string/section_tip" />
+
+                    <TextView
+                        style="@style/Hint"
+                        android:text="@string/tip_leave_with_back" />
                 </LinearLayout>
             </ScrollView>
 
