@@ -1,9 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Carried over from MG4 Simple Launcher by way of MG4 360 Camera, so that this app and the
+     vehicle read as one interface. Values, not artwork: nothing here is copied from the head
+     unit, only measured from it.
+
+     This app kept the Android Studio template palette longer than the others — a #6200EE
+     purple that belonged to no car ever made. -->
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="black">#FF000000</color>
+    <color name="text_primary">#3c4143</color>
+    <color name="text_secondary">#7f3c4143</color>
+    <color name="text_tertiary">#503c4143</color>
+
+    <!-- SAIC blue: the accent on the factory launcher. -->
+    <color name="accent">#056eff</color>
+    <color name="accent_pressed">#0455cc</color>
+
+    <!-- The stock side dock is #f2f2f2 by day (SystemUI dockbar_bg_color). Using the dock's
+         own grey rather than the launcher's home artwork is deliberate: this is a utility
+         screen that sits over the car's interface, not a home screen, and the fixed sidebar
+         is the thing it sits next to. -->
+    <color name="surface">#f2f2f2</color>
+
+    <!-- Tonal surfaces, tints of the text colour rather than greys of their own. -->
+    <color name="button_surface">#1f3c4143</color>
+    <color name="button_surface_pressed">#3d3c4143</color>
+    <color name="button_border">#00000000</color>
+
+    <color name="hairline">#14000000</color>
+    <!-- The rule between the two columns, deliberately stronger than a hairline. A hairline
+         separates things that are already close in meaning; these are two different subjects
+         side by side, and at 8% it read as a smudge rather than as a boundary. -->
+    <color name="column_rule">#26000000</color>
+
+    <!-- The two help bars along the bottom edge. Their whole job is to teach where the two
+         invisible strips are, so they are solid and clearly different from each other: the
+         first attempt made them tints of the accent and they went so quiet they stopped
+         teaching anything.
+
+         Slate for the one that goes back, SAIC blue for the one that opens the app — the
+         accent marks the action, as it does everywhere else in the suite. White text on both,
+         which holds at 4.5:1 or better on each. -->
+    <color name="help_back_area">#3c4143</color>
+    <color name="help_open_area">#056eff</color>
+
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
     <color name="fifty_white">#7fffffff</color>
-    <color name="help_back_area">#3F51B5</color>
-    <color name="help_open_area">#FF5722</color>
 </resources>

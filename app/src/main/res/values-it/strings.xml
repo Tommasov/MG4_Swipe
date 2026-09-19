@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MG4 Swipe Launcher</string>
+    <string name="app_name">MG4 Swipe</string>
     <string name="explanation_text">Scegli una app da lanciare con lo swipe dal basso.</string>
     <string name="show_system_apps">Mostra le app di sistema</string>
     <string name="hide_system_apps">Nascondi le app di sistema</string>
@@ -8,7 +8,8 @@
     <string name="per_funzionare_correttamente_l_app_ha_bisogno_del_permesso_di_accessibilit">Per funzionare correttamente, l\'app ha bisogno del permesso di accessibilità. \nUna volta concesso devi riaprire l\'applicazione.</string>
     <string name="concedi_permesso">Concedi Permesso</string>
     <string name="per_funzionare_correttamente_l_app_ha_bisogno_del_permesso_di_disegnare_sopra_le_altre_app">Per funzionare correttamente, l\'app ha bisogno del permesso di disegnare sopra le altre app. \nUna volta concesso devi riaprire l\'applicazione.</string>
-    <string name="nascondi_il_bottone_indietro_utile_per_i_tagliandi">Nascondi il bottone indietro flottante, utile per i tagliandi (nascosto di default)</string>
+    <string name="nascondi_il_bottone_indietro_utile_per_i_tagliandi">Nascondi il tasto indietro flottante</string>
+    <string name="hide_back_button_summary">Utile quando l\'auto va in officina. Di serie è nascosto.</string>
     <string name="help_swipe_up_here_to_go_back_this_simulate_the_physical_back_button">Aiuto: scorri verso l\'alto qui per tornare indietro (simula il tasto fisico Indietro)</string>
     <string name="help_swipe_up_here_to_open_selected_app">Aiuto: scorri verso l\'alto qui per aprire l\'app selezionata</string>
     <string name="swap_swipe_areas">Inverti le aree di swipe (sinistra ↔ destra)</string>
@@ -17,4 +18,6 @@
     <string name="package_not_found">App non trovata</string>
     <string name="selected_app">Selezionata: %1$s</string>
     <string name="version_label">v%1$s</string>
+    <string name="section_options">Opzioni</string>
+    <string name="section_target">App da aprire</string>
 </resources>

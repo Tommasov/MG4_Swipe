@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MG4 Swipe Launcher</string>
+    <string name="app_name">MG4 Swipe</string>
     <string name="explanation_text">Choose an app to launch with a swipe up.</string>
     <string name="show_system_apps">Show System Apps</string>
     <string name="hide_system_apps">Hide System Apps</string>
@@ -7,7 +7,8 @@
     <string name="per_funzionare_correttamente_l_app_ha_bisogno_del_permesso_di_accessibilit">To function properly, the app needs accessibility permission. \nOnce granted you must reopen the application.</string>
     <string name="concedi_permesso">Grant Permission</string>
     <string name="per_funzionare_correttamente_l_app_ha_bisogno_del_permesso_di_disegnare_sopra_le_altre_app">To function properly, the app needs permission to draw on top of other apps. \nOnce granted you must reopen the application.</string>
-    <string name="nascondi_il_bottone_indietro_utile_per_i_tagliandi">Hide the floating back button, useful for car servicing (this is hidden by default)</string>
+    <string name="nascondi_il_bottone_indietro_utile_per_i_tagliandi">Hide the floating back button</string>
+    <string name="hide_back_button_summary">Useful when the car goes in for servicing. It is hidden by default.</string>
     <string name="help_swipe_up_here_to_go_back_this_simulate_the_physical_back_button">Help: Swipe up here to go back (this simulate the physical back button)</string>
     <string name="help_swipe_up_here_to_open_selected_app">Help: Swipe up here to open selected app</string>
     <string name="swap_swipe_areas">Swap the swipe areas (left ↔ right)</string>
@@ -16,4 +17,6 @@
     <string name="package_not_found">Package not found</string>
     <string name="selected_app">Selected: %1$s</string>
     <string name="version_label">v%1$s</string>
+    <string name="section_options">Options</string>
+    <string name="section_target">App to launch</string>
 </resources>

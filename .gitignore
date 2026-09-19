@@ -13,3 +13,4 @@ local.properties
 keystore.properties
 *.jks
 *.keystore
+apikeys.properties

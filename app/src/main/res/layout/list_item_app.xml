@@ -26,5 +26,5 @@
         android:layout_height="32dp"
         android:src="@android:drawable/btn_star_big_on"
         android:visibility="gone"
-        app:tint="@color/colorPrimary" />
+        app:tint="@color/accent" />
 </LinearLayout>

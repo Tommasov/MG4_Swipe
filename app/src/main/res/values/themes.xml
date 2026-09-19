@@ -1,8 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AppCompat rather than Material3, like the rest of the suite. Material's own components
+     bring their own colours and shapes, and on a screen that has to look like the car's own
+     settings they are a fight rather than a help; no layout here used one. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MG4SwipeNovaLauncher" parent="Theme.Material3.DayNight.NoActionBar">
-
+    <style name="Theme.MG4SwipeNovaLauncher" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/surface</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
     </style>
-
-    <style name="Theme.MG4SwipeNovaLauncher" parent="Base.Theme.MG4SwipeNovaLauncher" />
 </resources>

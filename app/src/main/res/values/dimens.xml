@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sized for a screen read from a metre away, from MG4 360 Camera. What this app had instead
+     were the template's defaults: 18sp labels and 12sp buttons, which are fine on a phone held
+     at arm's length and unreadable on a dashboard. -->
+<resources>
+    <dimen name="screen_padding">24dp</dimen>
+    <!-- Between the two columns, with the rule down the middle of it. -->
+    <dimen name="column_gap">48dp</dimen>
+
+    <dimen name="title_size">30sp</dimen>
+    <dimen name="section_header_size">20sp</dimen>
+    <dimen name="row_label_size">28sp</dimen>
+    <dimen name="secondary_text_size">20sp</dimen>
+    <dimen name="button_size">26sp</dimen>
+    <dimen name="mono_size">16sp</dimen>
+
+    <!-- A row is 88dp so that a finger has somewhere to land whatever the control inside it
+         measures. -->
+    <dimen name="row_height">88dp</dimen>
+    <dimen name="row_gap">18dp</dimen>
+    <dimen name="section_gap">36dp</dimen>
+
+    <dimen name="button_radius">10dp</dimen>
+    <dimen name="button_padding_h">24dp</dimen>
+    <dimen name="button_padding_v">12dp</dimen>
+    <dimen name="button_gap">16dp</dimen>
+    <!-- Room kept clear under the floating corner button, so text in the
+         right column cannot run beneath it. -->
+    <dimen name="corner_action_clearance">320dp</dimen>
+    <dimen name="field_margin_top">12dp</dimen>
+
+    <dimen name="switch_padding">24dp</dimen>
+    <!-- The column rule carries more weight than a hairline, so it is drawn thicker too. -->
+    <dimen name="column_rule_width">2dp</dimen>
+    <dimen name="hairline_height">1dp</dimen>
+</resources>

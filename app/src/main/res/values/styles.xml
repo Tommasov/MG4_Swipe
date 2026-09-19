@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The same vocabulary as MG4 360 Camera and MG4 Assistant: only buttons carry a tonal face,
+     explanations are plain text, and groups are separated by an accent heading and a hairline
+     rather than by boxes. Nothing that cannot be pressed should look as though it can. -->
+<resources>
+    <!-- Section divider: a quiet label with room above it, in the accent colour so the eye can
+         find the boundaries without a rule across the screen. -->
+    <style name="SectionHeader" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/section_gap</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textSize">@dimen/section_header_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Explanatory line under a control. Two lines at most; if it needs three, the control is
+         wrong. -->
+    <style name="Hint" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">@dimen/secondary_text_size</item>
+    </style>
+
+    <!-- Switches and the rows they sit in. The row carries the height, so the finger has 88dp
+         to land on whatever the control itself measures. -->
+    <style name="Choice" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/row_height</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/row_label_size</item>
+    </style>
+
+    <!-- Tonal button: a tint of the text colour rather than a grey of its own, so it belongs to
+         whatever background it sits on, by day and by night alike. -->
+    <style name="TonalButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_tonal_button</item>
+        <item name="android:minHeight">@dimen/row_height</item>
+        <item name="android:paddingStart">@dimen/button_padding_h</item>
+        <item name="android:paddingEnd">@dimen/button_padding_h</item>
+        <item name="android:paddingTop">@dimen/button_padding_v</item>
+        <item name="android:paddingBottom">@dimen/button_padding_v</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/button_size</item>
+    </style>
+
+    <!-- A tonal button that sits beside text rather than in a row of its own controls. It
+         keeps the face and the type size and gives up the 88dp minimum, which exists so a
+         finger can find a control on a moving car — this one is pressed once, parked. -->
+    <style name="TonalButtonCompact" parent="TonalButton">
+        <item name="android:minHeight">0dp</item>
+    </style>
+
+    <style name="Hairline" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/hairline_height</item>
+        <item name="android:layout_marginTop">@dimen/row_gap</item>
+        <item name="android:background">@color/hairline</item>
+    </style>
+</resources>

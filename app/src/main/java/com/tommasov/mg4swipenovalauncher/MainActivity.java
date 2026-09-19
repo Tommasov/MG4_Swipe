@@ -5,7 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.ListView;
-import android.widget.Switch;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             toggleSystemAppsButton.setText(adapter.isSystemAppsVisible() ? getString(R.string.hide_system_apps) : getString(R.string.show_system_apps));
         });
 
-        Switch switchBackButton = findViewById(R.id.switch_back_button);
+        CompoundButton switchBackButton = findViewById(R.id.switch_back_button);
 
         // The switch label reads "Hide the back button", so checked == hidden.
         switchBackButton.setChecked(!preferencesManager.isBackButtonVisible());
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             startSwipeService();
         });
 
-        Switch switchSwapAreas = findViewById(R.id.switch_swap_areas);
+        CompoundButton switchSwapAreas = findViewById(R.id.switch_swap_areas);
         switchSwapAreas.setChecked(preferencesManager.isSwipeAreasSwapped());
         updateHelpLabels(preferencesManager.isSwipeAreasSwapped());
 
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             startSwipeService();
         });
 
-        Switch switchShowLoader = findViewById(R.id.switch_show_loader);
+        CompoundButton switchShowLoader = findViewById(R.id.switch_show_loader);
         switchShowLoader.setChecked(preferencesManager.isShowLoader());
         // The loader preference is read on every swipe in SwipeService, so no service
         // restart is needed for the change to take effect.
