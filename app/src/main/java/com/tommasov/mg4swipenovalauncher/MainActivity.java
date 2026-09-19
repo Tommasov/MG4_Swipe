@@ -44,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
         TextView explanationText = findViewById(R.id.explanation_text);
         explanationText.setText(R.string.explanation_text);
 
+        TextView bootText = findViewById(R.id.boot_timing_text);
+        String bootTiming = new BootLog(this).describe(this);
+        bootText.setText(bootTiming);
+        bootText.setVisibility(bootTiming.isEmpty() ? android.view.View.GONE
+                : android.view.View.VISIBLE);
+
         TextView versionText = findViewById(R.id.version_text);
         try {
             String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;

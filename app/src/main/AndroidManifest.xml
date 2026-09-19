@@ -41,11 +41,19 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
+        <!-- directBootAware only so that LOCKED_BOOT_COMPLETED can be timestamped: it
+             arrives before the credential storage is unlocked, and a receiver that is not
+             direct-boot aware never sees it. Nothing is started from there — the service is
+             not direct-boot aware and its preferences would not be readable yet. The two
+             timings exist to show whether moving the real start to the earlier broadcast
+             would recover any of the ten seconds the gesture is dead after a cold boot. -->
         <receiver
             android:name=".BootReceiver"
+            android:directBootAware="true"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>

@@ -78,6 +78,15 @@ public class SwipeService extends Service {
             backButton();
 
         } else {
+            // Belt and braces alongside the check in BootReceiver, for any other way this
+            // service might be started: if it was started with startForegroundService(), the
+            // system expects startForeground() within five seconds whatever happens next, and
+            // stopping without it is a RemoteServiceException rather than a clean exit.
+            createNotificationChannel();
+            startForeground(1, new Notification.Builder(this, CHANNEL_ID)
+                    .setContentTitle("MG4 Swipe Launcher Service")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .build());
             stopSelf();
         }
     }
