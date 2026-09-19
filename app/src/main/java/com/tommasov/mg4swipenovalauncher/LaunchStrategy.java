@@ -39,7 +39,22 @@ public enum LaunchStrategy {
             Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED),
 
     /** Nothing but the flag a service is obliged to pass, as a control. */
-    PLAIN("NEW_TASK only", Intent.FLAG_ACTIVITY_NEW_TASK);
+    PLAIN("NEW_TASK only", Intent.FLAG_ACTIVITY_NEW_TASK),
+
+    /**
+     * Empties the task and starts it again, instead of bringing the existing one forward.
+     *
+     * <p>Added after the emulator finally reproduced the delay and named it: leaving the app
+     * with BACK and re-opening it takes 155 ms, leaving it with HOME and re-opening it takes
+     * 2300 ms, from the same launcher, to the same app, with the same flags. BACK finishes the
+     * activity so there is no task to move; HOME keeps it, and moving a task that was
+     * backgrounded in the last ten seconds is what costs the two seconds.
+     *
+     * <p>So this makes every launch look like the fast one. The price is the app's state:
+     * a browser reloads its page, a launcher does not care. Worth measuring before choosing.
+     */
+    CLEAR("CLEAR_TASK",
+            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
     public final String label;
     public final int flags;
