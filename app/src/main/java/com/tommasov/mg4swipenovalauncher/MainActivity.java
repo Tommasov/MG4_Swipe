@@ -84,7 +84,20 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            ApplicationInfo selectedApp = userApps.get(position);
+            // Asked of the adapter, not of the full list, and the difference is a bug
+            // rather than a style. The adapter does not show userApps: filterApps() runs in
+            // its constructor, hoisting launchers to the top and hiding system apps, so the
+            // order on screen has never matched the alphabetical list behind it. Reading
+            // userApps.get(position) therefore saved the wrong package on every tap, from the
+            // first render, not only after the system-apps filter was toggled.
+            //
+            // It was visible rather than silent: the tick is drawn wherever the saved package
+            // sits, so it landed on a different row from the finger. Fix taken from the
+            // EVSwipe fork (malys), which found it first.
+            ApplicationInfo selectedApp = adapter.getItem(position);
+            if (selectedApp == null) {
+                return;
+            }
             preferencesManager.saveSelectedPackage(selectedApp.packageName);
             adapter.setSelectedPackage(selectedApp.packageName);
             adapter.notifyDataSetChanged();

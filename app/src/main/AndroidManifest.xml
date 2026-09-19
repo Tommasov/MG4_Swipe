@@ -5,6 +5,12 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- From API 34 a foreground service must declare a type, and the type must be backed by
+         its own permission. This service is none of the catalogued kinds — it holds the swipe
+         overlay and nothing else — which is what "special use" exists for. Inert on the car,
+         which is Android 9, and the difference between running and not running anywhere
+         newer. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +32,13 @@
 
         <service
             android:name=".SwipeService"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Holds the always-on swipe strips and the floating back button,
+                    which must stay on screen over every other app." />
+        </service>
 
         <service
             android:name=".AccService"

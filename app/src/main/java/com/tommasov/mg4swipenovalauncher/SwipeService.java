@@ -1,6 +1,5 @@
 package com.tommasov.mg4swipenovalauncher;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ServiceInfo;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
 
 public class SwipeService extends Service {
@@ -57,7 +58,6 @@ public class SwipeService extends Service {
     // is shown, cleared once dismissed. null means "not currently waiting".
     private String pendingLoaderPackage;
 
-    @SuppressLint("ForegroundServiceType")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,7 +72,7 @@ public class SwipeService extends Service {
                     .setContentTitle("MG4 Swipe Launcher Service")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .build();
-            startForeground(1, notification);
+            startInForeground(notification);
 
             swipe();
             backButton();
@@ -368,6 +368,28 @@ public class SwipeService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    /**
+     * Goes foreground under the service type the manifest declares.
+     *
+     * <p>The plain two-argument call was correct while nothing was declared, and became a
+     * crash the moment the app targeted API 34: a foreground service with no type is refused
+     * outright with {@code MissingForegroundServiceTypeException}. The lint warning that said
+     * so was suppressed rather than answered, which is why nothing broke on a car running
+     * Android 9 and everything would break on anything newer.
+     *
+     * <p>{@code specialUse} because none of the catalogued types fits: this service holds an
+     * on-screen overlay and does nothing else. Taken from the EVSwipe fork (malys).
+     */
+    private void startInForeground(Notification notification) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ServiceCompat.startForeground(this, 1, notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        } else {
+            // Before API 34 no type is declared, checked, or needed.
+            startForeground(1, notification);
+        }
     }
 
     private void createNotificationChannel() {

@@ -1,6 +1,7 @@
 package com.tommasov.mg4swipenovalauncher;
 
 import android.accessibilityservice.AccessibilityService;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -58,17 +59,35 @@ public class PermissionActivity extends AppCompatActivity {
         checkPermissions();
     }
 
+    /**
+     * Whether our accessibility service is switched on.
+     *
+     * <p>Compared as components rather than as strings, and that is the fix rather than the
+     * tidying. The setting is a colon-separated list of flattened component names, and the
+     * same service may legitimately appear in it in two spellings: the long
+     * {@code pkg/pkg.AccService} that the system's own Settings screen writes, or the short
+     * {@code pkg/.AccService} that is equally valid and that anything setting the value by
+     * hand is likely to use. A string comparison sees those as different, so the app went on
+     * asking for a permission the system had already granted — with the Accessibility screen
+     * showing the service as On, which makes it a maddening thing to be told.
+     *
+     * <p>{@link ComponentName#unflattenFromString} understands both forms and expands the
+     * leading dot, so the comparison is between what the two names mean rather than how they
+     * were typed.
+     */
     private boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
-        String serviceId = context.getPackageName() + "/" + service.getName();
+        ComponentName wanted = new ComponentName(context, service);
         String enabledServices = Settings.Secure.getString(
                 context.getContentResolver(),
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         );
-        if (enabledServices != null) {
-            for (String enabledService : enabledServices.split(":")) {
-                if (enabledService.equalsIgnoreCase(serviceId)) {
-                    return true;
-                }
+        if (enabledServices == null) {
+            return false;
+        }
+        for (String enabledService : enabledServices.split(":")) {
+            ComponentName enabled = ComponentName.unflattenFromString(enabledService.trim());
+            if (wanted.equals(enabled)) {
+                return true;
             }
         }
         return false;
